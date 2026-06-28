@@ -52,59 +52,67 @@ A API ficará disponível em:
 http://localhost:3000
 
 
-### 4. Autenticação (JWT)
+## 4. 🔐 Autenticação (JWT)
 
 A API utiliza autenticação com token.
 
-Fluxo:
-- Criar usuário:
-- POST /register
-- Fazer login:
-- POST /login
-- Copiar o token retornado
-- Usar no Header das requisições protegidas:
-- Authorization: Bearer SEU_TOKEN
+### Fluxo:
+- Criar usuário: POST `/register`  
+- Fazer login: POST `/login`  
+- Copiar o token retornado  
+- Usar no Header das requisições protegidas:  
+  Authorization: Bearer SEU_TOKEN  
 
-### 5. 📌 Rotas da API
+---
 
-## 🔐 Autenticação
+## 5. 📌 Rotas da API
 
+### 🔐 Autenticação
 - POST `/register` → cria usuário  
 - POST `/login` → realiza login e retorna token  
 
-## 📦 Produtos
+---
 
+### 📦 Produtos
 - POST `/products` → cria produto (protegido)  
 - GET `/products` → lista produtos  
 
-## 🧾 Pedidos
+---
 
+### 🧾 Pedidos
 - POST `/orders` → cria pedido (protegido)  
 - GET `/orders` → lista pedidos (protegido)  
 
-## 💳 Pagamento
-- POST `/pay/:id` → simula pagamento de pedido (protegido)
+---
 
-🔄 Fluxo principal do sistema
-- Criar usuário `(/register)`
-- Fazer login `(/login)`
-- Criar produtos `(/products)`
-- Criar pedido `(/orders)`
-- Realizar pagamento `(/pay/:id)`
-- Verificar status do pedido
+### 💳 Pagamento
+- POST `/pay/:id` → simula pagamento de pedido (protegido)  
 
-### 6. 🧪 Testes (Postman)
+---
+
+## 🔄 6. Fluxo principal do sistema
+
+- Criar usuário (/register)  
+- Fazer login (/login)  
+- Criar produtos (/products)  
+- Criar pedido (/orders)  
+- Realizar pagamento (/pay/:id)  
+- Verificar status do pedido  
+
+---
+
+## 🧪 7. Testes (Postman)
 
 Os testes foram realizados utilizando Postman.
 
-Cenários testados:
-- Cadastro de usuário
-- Login e geração de token JWT
-- Criação de produtos
-- Listagem de produtos
-- Criação de pedidos
-- Pagamento simulado
-- Teste de rotas protegidas (com e sem token)
+### Cenários testados:
+- Cadastro de usuário  
+- Login e geração de token JWT  
+- Criação de produtos  
+- Listagem de produtos  
+- Criação de pedidos  
+- Pagamento simulado  
+- Teste de rotas protegidas (com e sem token)  
 
 ⚠️ Observações
 O projeto utiliza dados em memória (sem banco de dados)
