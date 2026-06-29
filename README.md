@@ -114,6 +114,11 @@ Os testes foram realizados utilizando Postman.
 - Pagamento simulado  
 - Teste de rotas protegidas (com e sem token)  
 
+## 🔗 Repositório
+
+GitHub:
+https://github.com/TainaraCostta/backend-projeto
+
 ⚠️ Observações
 O projeto utiliza dados em memória (sem banco de dados)
 O objetivo é demonstrar funcionamento de API REST simples

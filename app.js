@@ -2,44 +2,83 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const db = require("./database");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// configuração do swagger
 const SECRET = "segredo";
 
-// bancos simples em memória
-let users = [];
-let products = [];
-let orders = [];
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Backend Projeto",
+      version: "1.0.0",
+      description: "API REST desenvolvida em Node.js"
+    }
+  },
+  apis: ["./app.js"]
+};
 
-// criar registro e login 
+const swaggerSpec = swaggerJsdoc(options);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+/* =========================
+   AUTH
+========================= */
+
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
-  users.push({ email, password });
+  db.run(
+    "INSERT INTO users (email, password) VALUES (?, ?)",
+    [email, password],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Erro ao criar usuário" });
+      }
 
-  res.json({ message: "Usuário criado" });
+      res.json({ id: this.lastID, message: "Usuário criado" });
+    }
+  );
 });
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  const user = users.find(
-    u => u.email === email && u.password === password
+  db.get(
+    "SELECT * FROM users WHERE email = ? AND password = ?",
+    [email, password],
+    (err, user) => {
+      if (err) {
+        return res.status(500).json({ message: "Erro interno" });
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: "Login inválido" });
+      }
+
+      const token = jwt.sign({ email: user.email }, SECRET, {
+        expiresIn: "1h"
+      });
+
+      res.json({ token });
+    }
   );
-
-  if (!user) {
-    return res.status(401).json({ message: "Login inválido" });
-  }
-
-  const token = jwt.sign({ email }, SECRET);
-
-  res.json({ token });
 });
-// criar token
+
+/* =========================
+   AUTH MIDDLEWARE
+========================= */
+
 function auth(req, res, next) {
   const token = req.headers.authorization;
 
@@ -54,56 +93,106 @@ function auth(req, res, next) {
     return res.status(401).json({ message: "token inválido" });
   }
 }
-// produtos
+
+/* =========================
+   PRODUCTS
+========================= */
+
 app.post("/products", auth, (req, res) => {
   const { name, price } = req.body;
 
-  const product = {
-    id: products.length + 1,
-    name,
-    price
-  };
+  db.run(
+    "INSERT INTO products (name, price) VALUES (?, ?)",
+    [name, price],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Erro ao criar produto" });
+      }
 
-  products.push(product);
-
-  res.json(product);
+      res.json({ id: this.lastID, name, price });
+    }
+  );
 });
 
 app.get("/products", (req, res) => {
-  res.json(products);
+  db.all("SELECT * FROM products", [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: "Erro ao buscar produtos" });
+    }
+
+    res.json(rows);
+  });
 });
-// pedidos
+
+/* =========================
+   ORDERS
+========================= */
+
 app.post("/orders", auth, (req, res) => {
   const { productId } = req.body;
 
-  const order = {
-    id: orders.length + 1,
-    productId,
-    status: "pending"
-  };
+  db.run(
+    "INSERT INTO orders (productId, status) VALUES (?, ?)",
+    [productId, "pending"],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Erro ao criar pedido" });
+      }
 
-  orders.push(order);
-
-  res.json(order);
+      res.json({ id: this.lastID, productId, status: "pending" });
+    }
+  );
 });
 
 app.get("/orders", auth, (req, res) => {
-  res.json(orders);
-});
-// pagamento mock
-app.post("/pay/:id", auth, (req, res) => {
-  const order = orders.find(o => o.id == req.params.id);
+  db.all("SELECT * FROM orders", [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: "Erro ao buscar pedidos" });
+    }
 
-  if (!order) {
-    return res.status(404).json({ message: "pedido não encontrado" });
-  }
-
-  order.status = "paid";
-
-  res.json({
-    message: "pagamento aprovado",
-    order
+    res.json(rows);
   });
+});
+
+/* =========================
+   PAYMENT
+========================= */
+
+app.post("/pay/:id", auth, (req, res) => {
+  const { id } = req.params;
+
+  db.get("SELECT * FROM orders WHERE id = ?", [id], (err, order) => {
+    if (err) {
+      return res.status(500).json({ message: "Erro interno" });
+    }
+
+    if (!order) {
+      return res.status(404).json({ message: "Pedido não encontrado" });
+    }
+
+    db.run(
+      "UPDATE orders SET status = ? WHERE id = ?",
+      ["paid", id],
+      function (err) {
+        if (err) {
+          return res.status(500).json({ message: "Erro ao atualizar pagamento" });
+        }
+
+        res.json({
+          message: "Pagamento aprovado",
+          order: { ...order, status: "paid" }
+        });
+      }
+    );
+  });
+});
+
+/* =========================
+   SWAGGER DOCS
+========================= */
+
+app.get("/swagger.json", (req, res) => {
+  res.json(swaggerSpec);
 });
 
 module.exports = app;
