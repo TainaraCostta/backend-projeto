@@ -1,4 +1,4 @@
-# 📌 API Backend - Projeto Acadêmico
+# 💻  API Backend - Projeto Acadêmico
 
 ## 📖 Sobre o projeto
 
@@ -13,12 +13,12 @@ O sistema simula uma lanchonete com:
 
 ---
 
-## 🚀 Tecnologias utilizadas
+## 🎮🕹️👾 Tecnologias utilizadas 
 
 - Node.js
 - Express
 - SQLite
-- JSON Web Token (JWT)
+- JWT
 - Swagger
 - Postman
 
@@ -26,15 +26,15 @@ O sistema simula uma lanchonete com:
 
 ## 📁 Estrutura do projeto
 
-backend-projeto/
-│
-├── app.js
-├── server.js
-├── database.js
-├── package.json
-├── postman/
-│   └── backend-projeto-postman.json
-└── README.md
+` backend-projeto/ `
+` │ `
+` ├── app.js `
+` ├── server.js `
+` ├── database.js `
+` ├── package.json `
+` ├── postman/ `
+` │   └── backend-projeto-postman.json `
+` └── README.md ` 
 
 ---
 
@@ -54,9 +54,7 @@ npm install
 node server.js
 ``` 
 
-## Documentação da API 📘
-
-Swagger UI disponível em:
+## Como acessar o Swagger 📘
 
 http://localhost:3000/api-docs
 
@@ -102,7 +100,7 @@ A API utiliza autenticação com token.
 
 ---
 
-### 🧪 Testes (Postman)
+### 👨‍🚀 Testes (Postman)
 
 A coleção de testes contém 10 cenários:
 

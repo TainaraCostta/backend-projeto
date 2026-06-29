@@ -176,11 +176,13 @@ app.post("/pay/:id", auth, (req, res) => {
 });
 
 
-  // SWAGGER DOCS
+  // Swagger docs
 app.get("/swagger.json", (req, res) => {
   res.json(swaggerSpec);
 });
 
+
+// comentario swagger 
 /**
  * @swagger
  * /register:
