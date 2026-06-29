@@ -1,15 +1,15 @@
-# 📌 Projeto Backend - API REST com Node.js
+# 📌 API Backend - Projeto Acadêmico
 
 ## 📖 Sobre o projeto
 
-Este projeto é uma API REST simples desenvolvida com **Node.js e Express**, com foco em aprendizado de backend.
+API REST desenvolvida em Node.js com Express, utilizando SQLite como banco de dados.
 
-A API simula um sistema básico com:
-- Autenticação de usuários (JWT)
+O sistema simula uma lanchonete com:
+- Autenticação JWT
 - Cadastro de produtos
 - Criação de pedidos
-- Pagamento simulado (mock)
-- Controle de status de pedidos
+- Pagamento simulado
+- Controle de status
 
 ---
 
@@ -17,22 +17,30 @@ A API simula um sistema básico com:
 
 - Node.js
 - Express
+- SQLite
 - JSON Web Token (JWT)
-- CORS
+- Swagger
+- Postman
 
 ---
 
 ## 📁 Estrutura do projeto
 
-- app.js → arquivo principal da aplicação
-- server.js → inicialização do servidor
-- dados armazenados em memória (sem banco de dados)
+backend-projeto/
+│
+├── app.js
+├── server.js
+├── database.js
+├── package.json
+├── postman/
+│   └── backend-projeto-postman.json
+└── README.md
 
 ---
 
 ## ⚙️ Como executar o projeto
 
-### 1. Instalar dependências
+###  Instalar dependências
 
 No terminal, dentro da pasta do projeto, execute:
 
@@ -40,19 +48,22 @@ No terminal, dentro da pasta do projeto, execute:
 npm install
 ```
 
-### 2. Iniciar o servidor
+###  Iniciar o servidor
 
 ```bash
 node server.js
-```
+``` 
 
-### 3. Acessar a API
+## Documentação da API 📘
 
-A API ficará disponível em:
+Swagger UI disponível em:
+
 http://localhost:3000/api-docs
 
+Caso as rotas não sejam exibidas automaticamente no ambiente local, 
+a documentação das rotas pode ser consultada pela coleção Postman incluída neste repositório.
 
-## 4. 🔐 Autenticação (JWT)
+##  🔐 Autenticação (JWT)
 
 A API utiliza autenticação com token.
 
@@ -60,12 +71,13 @@ A API utiliza autenticação com token.
 - Criar usuário: POST `/register`  
 - Fazer login: POST `/login`  
 - Copiar o token retornado  
-- Usar no Header das requisições protegidas:  
-  Authorization: Bearer SEU_TOKEN  
+- Utilizar o token nas rotas protegidas 
+  
+  Header: Authorization: Bearer SEU_TOKEN  
 
 ---
 
-## 5. 📌 Rotas da API
+##  📌 Rotas da API
 
 ### 🔐 Autenticação
 - POST `/register` → cria usuário  
@@ -90,45 +102,46 @@ A API utiliza autenticação com token.
 
 ---
 
-## 🔄 6. Fluxo principal do sistema
+### 🧪 Testes (Postman)
 
-- Criar usuário (/register)  
-- Fazer login (/login)  
-- Criar produtos (/products)  
-- Criar pedido (/orders)  
-- Realizar pagamento (/pay/:id)  
-- Verificar status do pedido  
+A coleção de testes contém 10 cenários:
 
----
+## Testes positivos
 
-## 🧪 7. Testes (Postman)
+- Cadastro de usuário
+- Login
+- Criação de produto
+- Listagem de produtos
+- Criação de pedido
+- Listagem de pedidos
+- Pagamento de pedido
 
-Os testes foram realizados utilizando Postman.
+## Testes negativos
 
-### Cenários testados:
-- Cadastro de usuário  
-- Login e geração de token JWT  
-- Criação de produtos  
-- Listagem de produtos  
-- Criação de pedidos  
-- Pagamento simulado  
-- Teste de rotas protegidas (com e sem token)  
+- Login inválido
+- Acesso sem token
+- Pedido inexistente
+
+Arquivo:
+
+/postman/backend-projeto-postman.json
+
+🗄️ Banco de dados
+
+SQLite utilizado para persistência real de dados.
+
+Tabelas:
+
+- users
+- products
+- orders
+ 
 
 ## 🔗 Repositório
 
 GitHub:
 https://github.com/TainaraCostta/backend-projeto
 
-### 🧪 Coleção Postman
 
-A coleção utilizada nos testes está disponível na pasta:
-
-/postman/backend-projeto-postman.json
-
-⚠️ Observações
-O projeto utiliza dados em memória (sem banco de dados)
-O objetivo é demonstrar funcionamento de API REST simples
-Projeto acadêmico com foco em aprendizado
-
-👨‍💻 Autor
-Projeto desenvolvido para atividade acadêmica de Backend com Node.js.
+👩🏻‍💻 Autor
+Projeto desenvolvido para atividade acadêmica da disciplina de Backend utilizando Node.js, Express, SQLite e JWT.
