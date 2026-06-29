@@ -31,10 +31,7 @@ const swaggerSpec = swaggerJsdoc(options);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-/* =========================
-   AUTH
-========================= */
-
+// registro e login
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
@@ -75,9 +72,7 @@ app.post("/login", (req, res) => {
   );
 });
 
-/* =========================
-   AUTH MIDDLEWARE
-========================= */
+// token
 
 function auth(req, res, next) {
   const token = req.headers.authorization;
@@ -94,10 +89,7 @@ function auth(req, res, next) {
   }
 }
 
-/* =========================
-   PRODUCTS
-========================= */
-
+  //  produtos 
 app.post("/products", auth, (req, res) => {
   const { name, price } = req.body;
 
@@ -124,10 +116,8 @@ app.get("/products", (req, res) => {
   });
 });
 
-/* =========================
-   ORDERS
-========================= */
-
+ 
+/// pedido 
 app.post("/orders", auth, (req, res) => {
   const { productId } = req.body;
 
@@ -154,9 +144,7 @@ app.get("/orders", auth, (req, res) => {
   });
 });
 
-/* =========================
-   PAYMENT
-========================= */
+// pagamento
 
 app.post("/pay/:id", auth, (req, res) => {
   const { id } = req.params;
@@ -187,12 +175,141 @@ app.post("/pay/:id", auth, (req, res) => {
   });
 });
 
-/* =========================
-   SWAGGER DOCS
-========================= */
 
+  // SWAGGER DOCS
 app.get("/swagger.json", (req, res) => {
   res.json(swaggerSpec);
 });
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Usuário criado com sucesso
+ */
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Faz login e retorna um token JWT
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token gerado com sucesso
+ *       401:
+ *         description: Credenciais inválidas
+ */
+
+/**
+ * @swagger
+ * /products:
+ *   get:
+ *     summary: Retorna todos os produtos
+ *     responses:
+ *       200:
+ *         description: Lista de produtos
+ */
+
+/**
+ * @swagger
+ * /products:
+ *   post:
+ *     summary: Cria um novo produto (requer autenticação)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Produto criado com sucesso
+ */
+
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     summary: Lista todos os pedidos (requer autenticação)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de pedidos
+ */
+
+/**
+ * @swagger
+ * /orders:
+ *   post:
+ *     summary: Cria um novo pedido (requer autenticação)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Pedido criado com sucesso
+ */
+
+/**
+ * @swagger
+ * /pay/{id}:
+ *   post:
+ *     summary: Realiza o pagamento de um pedido (requer autenticação)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pagamento aprovado
+ *       404:
+ *         description: Pedido não encontrado
+ */
+
 
 module.exports = app;
