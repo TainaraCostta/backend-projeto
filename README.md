@@ -49,7 +49,7 @@ node server.js
 ### 3. Acessar a API
 
 A API ficará disponível em:
-http://localhost:3000
+http://localhost:3000/api-docs
 
 
 ## 4. 🔐 Autenticação (JWT)
@@ -118,6 +118,12 @@ Os testes foram realizados utilizando Postman.
 
 GitHub:
 https://github.com/TainaraCostta/backend-projeto
+
+### 🧪 Coleção Postman
+
+A coleção utilizada nos testes está disponível na pasta:
+
+/postman/backend-projeto-postman.json
 
 ⚠️ Observações
 O projeto utiliza dados em memória (sem banco de dados)
